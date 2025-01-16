@@ -83,16 +83,16 @@ function Home() {
                 type="button"
                 className="bg-primary2 text-white shadow-custom font-bold border-none hover:bg-primary3 border border-gray-200 rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center me-2 mb-2"
               >
-                ⚽ Sports
+                ⚽️ Sports
               </button>
             </div>
           </div>
         </div>
-        {/* <Ads multiplex={true} data-ad-slot="5998667879" /> */}
-        <Ads data-ad-slot="3943175518" display={true} />
+        <Ads multiplex={true} data-ad-slot="5998667879" />
+        {/* <Ads data-ad-slot="3943175518" display={true} /> */}
         <div>
           <div className="px-5 grid grid-cols-2 gap-2 pb-5">
-            {gameData.map((items) => (
+                  {gameData.map((items) => (
               <div
                 key={items.gameName}
                 className="bg-primary1 rounded-lg border-solid border-x-[1px] border-primary1 border-y-[1px] p-3"
