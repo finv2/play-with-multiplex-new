@@ -8,17 +8,12 @@ export default function Homepage() {
       <Head>
         <title>{"Fin Games"}</title>
         <link rel="icon" href="/gameImage/launch-icon.png" />
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4575195873243785"
+     crossorigin="anonymous"></script>
       </Head>
-      <div
-        style={{
-          backgroundImage: "url('/gameImage/bg.jpg')",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundAttachment: "fixed",
-        }}
-      >
+
         <Home />
-      </div>
+
     </Fragment>
   );
 }

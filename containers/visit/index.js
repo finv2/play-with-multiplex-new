@@ -1,11 +1,18 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { IoLogoFacebook, IoLogoInstagram, IoLogoYoutube } from "react-icons/io";
 import { gameData } from "../../data/game";
 import Script from "next/script"; // Use next/script for script tags
 import Ads from "@components/Ads";
+import Modal from "@components/model";
 
 
 function VisitPage() {
+  const [isClient, setIsClient] = useState(false);
+    const [isOpen, SetIsOpen] = useState(true);
+    useEffect(() => {
+      // Ensures that the component only renders client-side content after hydration
+      setIsClient(true);
+    }, [isClient]);
   return (
     <>
       <div className="mx-auto h-max ls:w-[360px] bg-white">
@@ -71,6 +78,19 @@ function VisitPage() {
           <IoLogoYoutube size={35} className="text-primary2" />
         </div>
       </div>
+
+      {isClient && (
+         <Modal
+         outerClassName="border-[1px] border-white"
+         isOpen={isOpen}
+         onClose={() => SetIsOpen(false)}
+       >
+         <div className="md:mt-[18px] mt-[20px]">
+
+         <Ads display={true} data-ad-slot="7506023729" />
+         </div>
+       </Modal>
+      )}
     </>
   );
 }

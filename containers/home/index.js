@@ -27,11 +27,8 @@ function Home() {
           async
           src="https://cse.google.com/cse.js?cx=79d49729a410059d7"
         ></script>
-        <script
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4575195873243785"
-          crossorigin="anonymous"
-        ></script>
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4575195873243785"
+     crossorigin="anonymous"></script>
       </Head>
       <div className="mx-auto h-max ls:w-[360px] bg-white">
         <a href="https://fingameon.com/">
@@ -89,7 +86,6 @@ function Home() {
           </div>
         </div>
         <Ads multiplex={true} data-ad-slot="5998667879" />
-        {/* <Ads data-ad-slot="3943175518" display={true} /> */}
         <div>
           <div className="px-5 grid grid-cols-2 gap-2 pb-5">
                   {gameData.map((items) => (
@@ -135,13 +131,16 @@ function Home() {
         </div>
       </div>
       {isClient && (
-        <Modal
-          outerClassName="border-[1px] border-white"
-          isOpen={isOpen}
-          onClose={() => SetIsOpen(false)}
-        >
-          <Ads display={true} data-ad-slot="7506023729" />
-        </Modal>
+         <Modal
+         outerClassName="border-[1px] border-white"
+         isOpen={isOpen}
+         onClose={() => SetIsOpen(false)}
+       >
+         <div className="md:mt-[18px] mt-[20px]">
+
+         <Ads display={true} data-ad-slot="7506023729" />
+         </div>
+       </Modal>
       )}
     </>
   );
