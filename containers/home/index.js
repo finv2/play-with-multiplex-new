@@ -12,30 +12,31 @@ import Script from "next/script";
 function Home() {
   const Router = useRouter();
   const [isClient, setIsClient] = useState(false);
-  const [adsLoaded, setAdsLoaded] = useState(false);
   const [isOpen, setIsOpen] = useState(true);
+  const [adsLoaded, setAdsLoaded] = useState(false);
 
   useEffect(() => {
-    const loadAds = () => {
-      const script = document.createElement("script");
-      script.src =
-        "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4575195873243785";
-      script.async = true;
-      script.crossOrigin = "anonymous";
-      script.onload = () => {
-        setAdsLoaded(true);
-        window.adsbygoogle = window.adsbygoogle || [];
-        window.adsbygoogle.push({});
-      };
-      document.head.appendChild(script);
-    };
-
-    loadAds();
+    setIsClient(true);
   }, []);
 
-  // Force ad refresh when modal opens
+  // ✅ Ensure Google Ads script loads before content
   useEffect(() => {
-    if (isOpen) {
+    const script = document.createElement("script");
+    script.src =
+      "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4575195873243785";
+    script.async = true;
+    script.crossOrigin = "anonymous";
+    script.onload = () => {
+      setAdsLoaded(true);
+      window.adsbygoogle = window.adsbygoogle || [];
+      window.adsbygoogle.push({});
+    };
+    document.head.appendChild(script);
+  }, []);
+
+  // ✅ Force Ad Refresh when Modal Opens
+  useEffect(() => {
+    if (isOpen && adsLoaded) {
       setTimeout(() => {
         try {
           if (window.adsbygoogle) {
@@ -44,9 +45,9 @@ function Home() {
         } catch (e) {
           console.error("Ad reload error:", e);
         }
-      }, 500);
+      }, 1000); // Small delay to ensure ad loads
     }
-  }, [isOpen]);
+  }, [isOpen, adsLoaded]);
 
   if (!adsLoaded) {
     return (
@@ -76,7 +77,7 @@ function Home() {
           </div>
         </a>
 
-        {/* Main Ad - Loads First */}
+        {/* ✅ Load Ad First */}
         <Ads
           data-ad-slot="8616430030"
           data-ad-format="auto"
@@ -170,15 +171,9 @@ function Home() {
             </div>
           </a>
         </div>
-
-        <div className="flex items-center justify-center gap-1 pb-5">
-          <IoLogoFacebook size={35} className="text-primary2" />
-          <IoLogoInstagram size={35} className="text-primary2" />
-          <IoLogoYoutube size={35} className="text-primary2" />
-        </div>
       </div>
 
-      {/* Fixed Modal Ads */}
+      {/* ✅ Fixed Modal Ads */}
       {isClient && (
         <Modal
           outerClassName="border-[1px] border-white"
@@ -194,6 +189,9 @@ function Home() {
               data-ad-slot="7506023729"
               data-ad-format="auto"
             ></ins>
+            <script>
+              {`(adsbygoogle = window.adsbygoogle || []).push({})`}
+            </script>
           </div>
         </Modal>
       )}
