@@ -1,9 +1,11 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Head from "next/head";
+import { IoLogoFacebook, IoLogoInstagram, IoLogoYoutube } from "react-icons/io";
 import { useRouter } from "next/router";
 import { notify } from "../../components/Notify";
 import { gameData } from "data/game";
+import Ads from "@components/Ads";
 import Modal from "@components/model";
 import Script from "next/script";
 
@@ -17,7 +19,7 @@ function Home() {
     setIsClient(true);
   }, []);
 
-  // ✅ Load Google AdSense Script
+  // ✅ Ensure Google Ads script loads before content
   useEffect(() => {
     const script = document.createElement("script");
     script.src =
@@ -32,9 +34,9 @@ function Home() {
     document.head.appendChild(script);
   }, []);
 
-  // ✅ Force Reload of Ads
+  // ✅ Force Ad Refresh when Modal Opens
   useEffect(() => {
-    if (adsLoaded) {
+    if (isOpen && adsLoaded) {
       setTimeout(() => {
         try {
           if (window.adsbygoogle) {
@@ -43,9 +45,17 @@ function Home() {
         } catch (e) {
           console.error("Ad reload error:", e);
         }
-      }, 1000);
+      }, 1000); // Small delay to ensure ad loads
     }
-  }, [adsLoaded]);
+  }, [isOpen, adsLoaded]);
+
+  if (!adsLoaded) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <p>Loading ads...</p>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -54,6 +64,7 @@ function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Head>
 
+      {/* Google Custom Search Box */}
       <Script
         strategy="lazyOnload"
         src="https://cse.google.com/cse.js?cx=79d49729a410059d7"
@@ -66,53 +77,124 @@ function Home() {
           </div>
         </a>
 
-        {/* ✅ Regular Ad */}
-        <div className="my-5 flex justify-center">
-          <ins
-            className="adsbygoogle"
-            style={{ display: "block" }}
-            data-ad-client="ca-pub-4575195873243785"
-            data-ad-slot="8616430030"
-            data-ad-format="auto"
-            data-full-width-responsive="true"
-          ></ins>
-        </div>
+        {/* ✅ Load Ad First */}
+        <Ads
+          data-ad-slot="8616430030"
+          data-ad-format="auto"
+          data-full-width-responsive="true"
+        />
 
-        {/* ✅ Multiplex Ad */}
-        <div className="my-5 flex justify-center">
-          <ins
-            className="adsbygoogle"
-            style={{ display: "block" }}
-            data-ad-client="ca-pub-4575195873243785"
-            data-ad-slot="5998667879"
-            data-ad-format="autorelaxed"
-          ></ins>
-        </div>
-
-        {/* ✅ Force Ads to Load */}
-        <script>
-          {`(adsbygoogle = window.adsbygoogle || []).push({});`}
-        </script>
-
-        {/* Modal Ad */}
-        {isClient && (
-          <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
-            <div className="md:mt-[18px] mt-[20px]">
-              <ins
-                className="adsbygoogle"
-                style={{ display: "block" }}
-                data-ad-client="ca-pub-4575195873243785"
-                data-ad-slot="7506023729"
-                data-ad-format="auto"
-                data-full-width-responsive="true"
-              ></ins>
-              <script>
-                {`(adsbygoogle = window.adsbygoogle || []).push({});`}
-              </script>
+        <div className="flex items-center justify-center pt-10 px-5 pb-5">
+          <div className="bg-primary1 w-full rounded-md border-solid border-x-[1px] border-primary1 border-y-[1px] p-3">
+            <div className="text-primary2 text-center font-bold pb-2">
+              Welcome to Add on home screen
             </div>
-          </Modal>
-        )}
+            <div className="flex items-center justify-center">
+              <button
+                type="button"
+                onClick={() => notify.error("Not Available For Your Device")}
+                className="bg-primary2 shadow-custom text-white font-bold hover:bg-primary3 border border-none rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center me-2 mb-2"
+              >
+                Add
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Google Custom Search Box */}
+        {isClient && <div className="gcse-search"></div>}
+
+        <div className="flex items-center justify-center pt-10 px-5 pb-10">
+          <div className="bg-primary1 rounded-md border-solid border-x-[1px] border-primary1 border-y-[1px] p-5">
+            <div className="text-primary2 text-center font-bold pb-5">
+              Pick which of these game categories you enjoy more!
+            </div>
+            <div className="flex items-center justify-center">
+              <button
+                onClick={() => Router.push("/visit")}
+                type="button"
+                className="bg-primary2 shadow-custom text-white font-bold border-none hover:bg-primary3 border border-gray-200 rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center me-2 mb-2"
+              >
+                🏹 Classic
+              </button>
+
+              <button
+                onClick={() => Router.push("/visit")}
+                type="button"
+                className="bg-primary2 text-white shadow-custom font-bold border-none hover:bg-primary3 border border-gray-200 rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center me-2 mb-2"
+              >
+                ⚽️ Sports
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Multiplex Ad */}
+        <Ads multiplex={true} data-ad-slot="5998667879" />
+
+        <div>
+          <div className="px-5 grid grid-cols-2 gap-2 pb-5">
+            {gameData.map((items) => (
+              <div
+                key={items.gameName}
+                className="bg-primary1 rounded-lg border-solid border-x-[1px] border-primary1 border-y-[1px] p-3"
+              >
+                <img src={items.img} className="rounded-lg" />
+                <div className="text-primary2 text-center font-bold pt-1">
+                  {items.gameName}
+                </div>
+                <a href={items.src}>
+                  <button
+                    type="button"
+                    className="bg-primary2 w-full text-white font-bold hover:bg-primary3 border border-gray-200 rounded-lg text-sm px-4 py-2 text-center items-center"
+                  >
+                    Play Game
+                  </button>
+                </a>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="pt-10 px-5 pb-5">
+          <a href="https://fingameon.com/">
+            <button
+              type="button"
+              className="w-full text-center bg-primary2 text-white font-bold hover:bg-primary3 border border-gray-200 rounded-lg text-sm px-4 py-2"
+            >
+              More Games
+            </button>
+          </a>
+          <a href="https://fingameon.com/privacy-policy">
+            <div className="flex items-center justify-center text-primary2 hover:underline">
+              Privacy Policy
+            </div>
+          </a>
+        </div>
       </div>
+
+      {/* ✅ Fixed Modal Ads */}
+      {isClient && (
+        <Modal
+          outerClassName="border-[1px] border-white"
+          isOpen={isOpen}
+          onClose={() => setIsOpen(false)}
+        >
+          <div className="md:mt-[18px] mt-[20px]">
+            {/* Google AdSense Ad in Modal */}
+            <ins
+              className="adsbygoogle"
+              style={{ display: "block" }}
+              data-ad-client="ca-pub-4575195873243785"
+              data-ad-slot="7506023729"
+              data-ad-format="auto"
+            ></ins>
+            <script>
+              {`(adsbygoogle = window.adsbygoogle || []).push({})`}
+            </script>
+          </div>
+        </Modal>
+      )}
     </>
   );
 }
