@@ -7,14 +7,14 @@ import { notify } from "../../components/Notify";
 import { gameData } from "data/game";
 import Ads from "@components/Ads";
 import Modal from "@components/model";
-import Script from "next/script"; // Optimized script loading
+import Script from "next/script";
 
 function Home() {
   const Router = useRouter();
   const [isClient, setIsClient] = useState(false);
   const [adsLoaded, setAdsLoaded] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
 
-  // Load ads first, block UI until loaded
   useEffect(() => {
     const loadAds = () => {
       const script = document.createElement("script");
@@ -22,14 +22,32 @@ function Home() {
         "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4575195873243785";
       script.async = true;
       script.crossOrigin = "anonymous";
-      script.onload = () => setAdsLoaded(true); // Wait for ads to fully load
+      script.onload = () => {
+        setAdsLoaded(true);
+        window.adsbygoogle = window.adsbygoogle || [];
+        window.adsbygoogle.push({});
+      };
       document.head.appendChild(script);
     };
 
     loadAds();
   }, []);
 
-  // Block UI rendering until ads are loaded
+  // Force ad refresh when modal opens
+  useEffect(() => {
+    if (isOpen) {
+      setTimeout(() => {
+        try {
+          if (window.adsbygoogle) {
+            window.adsbygoogle.push({});
+          }
+        } catch (e) {
+          console.error("Ad reload error:", e);
+        }
+      }, 500);
+    }
+  }, [isOpen]);
+
   if (!adsLoaded) {
     return (
       <div className="flex items-center justify-center h-screen">
@@ -58,7 +76,7 @@ function Home() {
           </div>
         </a>
 
-        {/* Ads Load First - Keeping Same Ad Size & Format */}
+        {/* Main Ad - Loads First */}
         <Ads
           data-ad-slot="8616430030"
           data-ad-format="auto"
@@ -110,7 +128,7 @@ function Home() {
           </div>
         </div>
 
-        {/* Multiplex Ad - Keeping Same Ad Slot */}
+        {/* Multiplex Ad */}
         <Ads multiplex={true} data-ad-slot="5998667879" />
 
         <div>
@@ -160,15 +178,22 @@ function Home() {
         </div>
       </div>
 
+      {/* Fixed Modal Ads */}
       {isClient && (
         <Modal
           outerClassName="border-[1px] border-white"
           isOpen={isOpen}
-          onClose={() => SetIsOpen(false)}
+          onClose={() => setIsOpen(false)}
         >
           <div className="md:mt-[18px] mt-[20px]">
-            {/* Same Ad Slot & Format for Modal Ad */}
-            <Ads display={true} data-ad-slot="7506023729" />
+            {/* Google AdSense Ad in Modal */}
+            <ins
+              className="adsbygoogle"
+              style={{ display: "block" }}
+              data-ad-client="ca-pub-4575195873243785"
+              data-ad-slot="7506023729"
+              data-ad-format="auto"
+            ></ins>
           </div>
         </Modal>
       )}
