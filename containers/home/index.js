@@ -12,15 +12,31 @@ import Script from "next/script"; // Optimized script loading
 function Home() {
   const Router = useRouter();
   const [isClient, setIsClient] = useState(false);
-  const [isOpen, SetIsOpen] = useState(true);
+  const [adsLoaded, setAdsLoaded] = useState(false);
 
+  // Load ads first, block UI until loaded
   useEffect(() => {
-    setIsClient(true);
+    const loadAds = () => {
+      const script = document.createElement("script");
+      script.src =
+        "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4575195873243785";
+      script.async = true;
+      script.crossOrigin = "anonymous";
+      script.onload = () => setAdsLoaded(true); // Wait for ads to fully load
+      document.head.appendChild(script);
+    };
+
+    loadAds();
   }, []);
 
-  const handleClick = () => {
-    notify.error("Not Available For Your Device");
-  };
+  // Block UI rendering until ads are loaded
+  if (!adsLoaded) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <p>Loading ads...</p>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -29,14 +45,7 @@ function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Head>
 
-      {/* Load Google Ads First */}
-      <Script
-        strategy="beforeInteractive"
-        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4575195873243785"
-        crossOrigin="anonymous"
-      />
-
-      {/* Load Google Custom Search Box */}
+      {/* Google Custom Search Box */}
       <Script
         strategy="lazyOnload"
         src="https://cse.google.com/cse.js?cx=79d49729a410059d7"
@@ -49,7 +58,7 @@ function Home() {
           </div>
         </a>
 
-        {/* Ads First - Keeping Same Ad Size & Format */}
+        {/* Ads Load First - Keeping Same Ad Size & Format */}
         <Ads
           data-ad-slot="8616430030"
           data-ad-format="auto"
@@ -64,7 +73,7 @@ function Home() {
             <div className="flex items-center justify-center">
               <button
                 type="button"
-                onClick={handleClick}
+                onClick={() => notify.error("Not Available For Your Device")}
                 className="bg-primary2 shadow-custom text-white font-bold hover:bg-primary3 border border-none rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center me-2 mb-2"
               >
                 Add
