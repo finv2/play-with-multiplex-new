@@ -13,7 +13,7 @@ function Home() {
   const [isClient, setIsClient] = useState(false);
   const [isOpen, SetIsOpen] = useState(true);
   useEffect(() => {
-    // Ensures that the component only renders client-side content after hydration
+    // Ensures that the component only renders client-side content after hydration ....
     setIsClient(true);
   }, [isClient]);
   const handleClick = () => {
