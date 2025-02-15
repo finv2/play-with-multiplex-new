@@ -1,4 +1,3 @@
-import { gameData } from "data/game"; // This will now be fetched at build time
 import Head from "next/head";
 import { useRouter } from "next/router";
 import Script from "next/script";
@@ -142,7 +141,13 @@ function Home({ games }) {
                   height={300} // Keep the square aspect ratio
                   className="rounded-lg w-full h-auto"
                   priority={false}
+                  loading="lazy"
                 />
+                {/* <img
+                  src={game.img}
+                  alt={game.gameName}
+                  className="rounded-lg w-[300px] h-auto"
+                /> */}
                 <div className="text-primary2 text-center font-bold pt-1">
                   {game.gameName}
                 </div>
@@ -201,19 +206,6 @@ function Home({ games }) {
       </div>
     </>
   );
-}
-
-// ✅ Enable Static Generation (ISR) with revalidate
-export async function getStaticProps() {
-  // Fetch game data (or import from a static file)
-  const games = gameData; // Use static import or API fetch if needed
-
-  return {
-    props: {
-      games,
-    },
-    revalidate: 60, // Regenerate the page every 60 seconds
-  };
 }
 
 export default Home;

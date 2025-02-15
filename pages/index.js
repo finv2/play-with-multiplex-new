@@ -2,10 +2,10 @@ import Head from "next/head";
 // import dynamic from "next/dynamic";
 import { Fragment } from "react";
 import Home from "@containers/home";
-// Dynamically import Home to enable lazy loading
-// const Home = dynamic(() => import("../containers/home"), { ssr: false });
+import Script from "next/script";
+import { gameData } from "data/game";
 
-export default function Homepage() {
+export default function Homepage({ games }) {
   return (
     <Fragment>
       <Head>
@@ -20,14 +20,25 @@ export default function Homepage() {
           content="Fin Games - The best place for gaming."
         />
         <meta name="author" content="Fin Games" />
-        <script
+        <Script
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4575195873243785"
           crossOrigin="anonymous"
-        ></script>
+        ></Script>
       </Head>
 
-      <Home />
+      <Home games={games} />
     </Fragment>
   );
+}
+
+export async function getStaticProps() {
+  // Fetch game data (or import from a static file)
+  const games = gameData; // Use static import or API fetch if needed
+  return {
+    props: {
+      games,
+    },
+    revalidate: 86400, // Regenerate the page every 1 days
+  };
 }

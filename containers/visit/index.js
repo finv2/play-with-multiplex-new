@@ -1,28 +1,33 @@
 import React, { useEffect, useState } from "react";
 import { IoLogoFacebook, IoLogoInstagram, IoLogoYoutube } from "react-icons/io";
-import { gameData } from "../../data/game";
-import Script from "next/script"; // Use next/script for script tags
-import Ads from "@components/Ads";
-import Modal from "@components/model";
+import Image from "next/image"; // ✅ Optimized images
+import dynamic from "next/dynamic"; // ✅ Lazy load heavy components
 
+// Lazy load Ads & Modal to improve initial render speed
+const Ads = dynamic(() => import("@components/Ads"), { ssr: false });
+const Modal = dynamic(() => import("@components/model"), { ssr: false });
 
-function VisitPage() {
+function VisitPage({ gameData }) {
   const [isClient, setIsClient] = useState(false);
-    const [isOpen, SetIsOpen] = useState(true);
-    useEffect(() => {
-      // Ensures that the component only renders client-side content after hydration
-      setIsClient(true);
-    }, [isClient]);
+  const [isOpen, setIsOpen] = useState(true);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []); // ✅ Removed unnecessary dependency [isClient] to prevent extra re-renders.
+
   return (
     <>
       <div className="mx-auto h-max ls:w-[360px] bg-white">
+        {/* Success Message */}
         <div className="flex items-center justify-center pt-10 px-5 pb-10">
-          <div className="bg-primary1 w-full rounded-md border-solid border-x-[1px] border-primary1 border-y-[1px] p-5">
-            <img
+          <div className="bg-primary1 w-full rounded-md border border-primary1 p-5">
+            <Image
               src="/gameImage/success.png"
               width={80}
-              className="flex items-center mx-auto justify-center"
+              height={80}
+              className="mx-auto"
               alt="Success"
+              priority // ✅ Loads this image faster
             />
             <div className="text-primary2 text-center font-bold text-lg pt-3">
               Thank You,
@@ -33,33 +38,35 @@ function VisitPage() {
           </div>
         </div>
 
-        {/* Google Ads */}
+        {/* Google Ads - Lazy Loaded */}
         <Ads
-            data-ad-slot="8616430030"
-            data-ad-format="auto"
-            data-full-width-responsive="true"
-          />
+          data-ad-slot="8616430030"
+          data-ad-format="auto"
+          data-full-width-responsive="true"
+        />
+
         {/* Game Data */}
         <div className="px-5 grid grid-cols-2 gap-2">
-          {gameData && gameData.length > 0 ? (
-            gameData.map((items) => (
+          {gameData?.length > 0 ? (
+            gameData.map((game) => (
               <div
-                key={items.gameName}
-                className="bg-primary1 rounded-lg border-solid border-x-[1px] border-primary1 border-y-[1px] p-3"
+                key={game.gameName}
+                className="bg-primary1 rounded-lg border border-primary1 p-3"
               >
-                <img
-                  src={items.img}
-                  className="rounded-lg"
-                  alt={items.gameName}
+                <Image
+                  src={game.img}
+                  width={300}
+                  height={300}
+                  className="rounded-lg w-full h-auto"
+                  alt={game.gameName}
+                  loading="lazy" // ✅ Loads images efficiently
+                  priority={false}
                 />
                 <div className="text-primary2 text-center font-bold pt-1">
-                  {items.gameName}
+                  {game.gameName}
                 </div>
-                <a href={items.src}>
-                  <button
-                    type="button"
-                    className="bg-primary2 w-full text-white font-bold hover:bg-primary3 border border-gray-200 rounded-lg text-sm px-4 py-2 text-center items-center"
-                  >
+                <a href={game.src}>
+                  <button className="bg-primary2 w-full text-white font-bold hover:bg-primary3 border border-gray-200 rounded-lg text-sm px-4 py-2">
                     Play Game
                   </button>
                 </a>
@@ -69,8 +76,7 @@ function VisitPage() {
             <div>No games available.</div>
           )}
         </div>
-        {/* Google Ads */}
-      
+
         {/* Social Icons */}
         <div className="flex items-center justify-center gap-1 pb-5 pt-10">
           <IoLogoFacebook size={35} className="text-primary2" />
@@ -79,17 +85,17 @@ function VisitPage() {
         </div>
       </div>
 
+      {/* Modal - Only renders client-side */}
       {isClient && (
-         <Modal
-         outerClassName="border-[1px] border-white"
-         isOpen={isOpen}
-         onClose={() => SetIsOpen(false)}
-       >
-         <div className="md:mt-[18px] mt-[20px]">
-
-         <Ads display={true} data-ad-slot="7506023729" />
-         </div>
-       </Modal>
+        <Modal
+          outerClassName="border border-white"
+          isOpen={isOpen}
+          onClose={() => setIsOpen(false)}
+        >
+          <div className="mt-5">
+            <Ads display={true} data-ad-slot="7506023729" />
+          </div>
+        </Modal>
       )}
     </>
   );
