@@ -9,6 +9,28 @@ export default function Homepage({ games }) {
       <Head>
         <title>{"Fin Games"}</title>
         <link rel="icon" href="/gameImage/launch-icon.png" />
+        <meta charSet="utf-8" />
+        {/* Resource hints for Google AdSense */}
+        <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com" />
+        <link rel="dns-prefetch" href="https://googleads.g.doubleclick.net" />
+        <link rel="dns-prefetch" href="https://www.google.com" />
+
+        <link
+          rel="preconnect"
+          href="https://pagead2.googlesyndication.com"
+          crossOrigin="anonymous"
+        />
+        <link
+          rel="preconnect"
+          href="https://googleads.g.doubleclick.net"
+          crossOrigin="anonymous"
+        />
+        <link
+          rel="preconnect"
+          href="https://www.google.com"
+          crossOrigin="anonymous"
+        />
+
         <script
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4575195873243785"
