@@ -1,29 +1,18 @@
-import { gameData } from "data/game";
 import VisitPage from "../containers/visit";
 import Head from "next/head";
 import { Fragment } from "react";
 
-function Visit({ games }) {
+function Visit() {
   return (
     <Fragment>
       <Head>
         <title>{"Fin Games"}</title>
       </Head>
 
-      <VisitPage gameData={games} />
+      <VisitPage />
+
     </Fragment>
   );
-}
-
-export async function getStaticProps() {
-  // Fetch game data (or import from a static file)
-  const games = gameData; // Use static import or API fetch if needed
-  return {
-    props: {
-      games,
-    },
-    revalidate: 86400, // Regenerate the page every 1 day
-  };
 }
 
 export default Visit;

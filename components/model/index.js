@@ -1,7 +1,8 @@
-import cn from "classnames";
+import React, { useEffect } from "react";
 import PropTypes from "prop-types";
-import React from "react";
 import { createPortal } from "react-dom";
+import OutsideClickHandler from "react-outside-click-handler";
+import cn from "classnames";
 import { CgCloseR } from "react-icons/cg";
 import styles from "./Modal.module.scss";
 function Modal(props) {
@@ -16,6 +17,9 @@ function Modal(props) {
     title,
     closeIconClassName,
   } = props;
+
+
+  
 
   if (typeof document !== "undefined") {
     return createPortal(
@@ -33,15 +37,20 @@ function Modal(props) {
               outerClassName
             )}
           >
-            <div className={cn(styles.container, containerClassName)}>
-              {title}
-              <div className="">{children}</div>
-              {showCloseBtn && (
-                <div className={cn(styles.close)} onClick={onClose}>
-                  <CgCloseR size={20} className={styles.closeIcon} />
-                </div>
-              )}
-            </div>
+
+              <div className={cn(styles.container, containerClassName)}>
+                {title}
+                <div className="">{children}</div>
+                {showCloseBtn && (
+                  <div
+                    className={cn(styles.close)}
+                    onClick={onClose}
+                  >
+                    <CgCloseR size={20} className={styles.closeIcon}/>
+                  </div>
+                )}
+              </div>
+
           </div>
         </div>
       ),
