@@ -1,28 +1,29 @@
+import Ads from "@components/Ads";
+import Modal from "@components/model";
+import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { IoLogoFacebook, IoLogoInstagram, IoLogoYoutube } from "react-icons/io";
 import { gameData } from "../../data/game";
-import Script from "next/script"; // Use next/script for script tags
-import Ads from "@components/Ads";
-import Modal from "@components/model";
-
 
 function VisitPage() {
   const [isClient, setIsClient] = useState(false);
-    const [isOpen, SetIsOpen] = useState(true);
-    useEffect(() => {
-      // Ensures that the component only renders client-side content after hydration
-      setIsClient(true);
-    }, [isClient]);
+  const [isOpen, SetIsOpen] = useState(true);
+  useEffect(() => {
+    // Ensures that the component only renders client-side content after hydration
+    setIsClient(true);
+  }, [isClient]);
   return (
     <>
       <div className="mx-auto h-max ls:w-[360px] bg-white">
         <div className="flex items-center justify-center pt-10 px-5 pb-10">
           <div className="bg-primary1 w-full rounded-md border-solid border-x-[1px] border-primary1 border-y-[1px] p-5">
-            <img
+            <Image
               src="/gameImage/success.png"
               width={80}
-              className="flex items-center mx-auto justify-center"
+              height={80}
+              className="mx-auto"
               alt="Success"
+              priority
             />
             <div className="text-primary2 text-center font-bold text-lg pt-3">
               Thank You,
@@ -35,10 +36,10 @@ function VisitPage() {
 
         {/* Google Ads */}
         <Ads
-            data-ad-slot="8616430030"
-            data-ad-format="auto"
-            data-full-width-responsive="true"
-          />
+          data-ad-slot="8616430030"
+          data-ad-format="auto"
+          data-full-width-responsive="true"
+        />
         {/* Game Data */}
         <div className="px-5 grid grid-cols-2 gap-2">
           {gameData && gameData.length > 0 ? (
@@ -47,11 +48,20 @@ function VisitPage() {
                 key={items.gameName}
                 className="bg-primary1 rounded-lg border-solid border-x-[1px] border-primary1 border-y-[1px] p-3"
               >
-                <img
+                <Image
+                  src={items.img}
+                  width={300}
+                  height={300}
+                  className="rounded-lg w-full h-auto"
+                  alt={items.gameName}
+                  loading="lazy" // ✅ Loads images efficiently
+                  priority={false}
+                />
+                {/* <img
                   src={items.img}
                   className="rounded-lg"
                   alt={items.gameName}
-                />
+                /> */}
                 <div className="text-primary2 text-center font-bold pt-1">
                   {items.gameName}
                 </div>
@@ -70,7 +80,7 @@ function VisitPage() {
           )}
         </div>
         {/* Google Ads */}
-      
+
         {/* Social Icons */}
         <div className="flex items-center justify-center gap-1 pb-5 pt-10">
           <IoLogoFacebook size={35} className="text-primary2" />
@@ -80,16 +90,15 @@ function VisitPage() {
       </div>
 
       {isClient && (
-         <Modal
-         outerClassName="border-[1px] border-white"
-         isOpen={isOpen}
-         onClose={() => SetIsOpen(false)}
-       >
-         <div className="md:mt-[18px] mt-[20px]">
-
-         <Ads display={true} data-ad-slot="7506023729" />
-         </div>
-       </Modal>
+        <Modal
+          outerClassName="border-[1px] border-white"
+          isOpen={isOpen}
+          onClose={() => SetIsOpen(false)}
+        >
+          <div className="md:mt-[18px] mt-[20px]">
+            <Ads display={true} data-ad-slot="7506023729" />
+          </div>
+        </Modal>
       )}
     </>
   );
