@@ -1,45 +1,34 @@
+'use client';
+
 import { useEffect } from "react";
 
-const Ads = (props) => {
+const AdsenseAd = ({
+  adClient = "ca-pub-4575195873243785",
+  adSlot = "6300978111",
+  format = "auto",
+  responsive = true,
+  test = true
+}) => {
   useEffect(() => {
     try {
-      (window.adsbygoogle = window.adsbygoogle || []).push({});
-    } catch (err) {
-      console.log(err);
+      if (typeof window !== "undefined" && window.adsbygoogle) {
+        (window.adsbygoogle = window.adsbygoogle || []).push({});
+      }
+    } catch (e) {
+      console.error("Adsense push error:", e);
     }
   }, []);
 
-  // Determine the appropriate style based on props
-  const adStyle = props.multiplex
-    ? {
-        display: "inline-block",
-        width: "360px",
-        height: "400px",
-      }
-    : props.display
-    ? {
-        display: "inline-block",
-        width: "336px",
-        height: "280px",
-      }
-    : {
-        display: "block",
-      };
-
   return (
-    <a
-      href="#"
-      onClick={() => console.log("Ad clicked")} // Replace with your logic
-      style={{ display: "block" }}
-    >
-      <ins
-        className="adsbygoogle adbanner-customize"
-        style={adStyle}
-        data-ad-client="ca-pub-4575195873243785"
-        {...props}
-      />
-    </a>
+    <ins
+      className="adsbygoogle adbanner-customize"
+      style={{ display: "block", width: "100%", border: test ? "1px solid red" : "none" }}
+      data-ad-client={adClient}
+      data-ad-slot={adSlot}
+      data-ad-format={format}
+      data-full-width-responsive={responsive ? "true" : "false"}
+      data-adtest={test ? "on" : null}    />
   );
 };
 
-export default Ads;
+export default AdsenseAd;

@@ -36,9 +36,8 @@ function VisitPage() {
 
         {/* Google Ads */}
         <Ads
-          data-ad-slot="8616430030"
-          data-ad-format="auto"
-          data-full-width-responsive="true"
+          adSlot="8616430030"
+          test={process.env.NODE_ENV === "development"}
         />
         {/* Game Data */}
         <div className="px-5 grid grid-cols-2 gap-2">
@@ -96,7 +95,7 @@ function VisitPage() {
           onClose={() => SetIsOpen(false)}
         >
           <div className="md:mt-[18px] mt-[20px]">
-            <Ads display={true} data-ad-slot="7506023729" />
+            <Ads display={true} adSlot="7506023729" />
           </div>
         </Modal>
       )}
