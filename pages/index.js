@@ -38,6 +38,9 @@ export default function Homepage({ games }) {
         crossOrigin="anonymous"
         strategy="afterInteractive"
         src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4575195873243785"
+        onLoad={() => {
+          window.adsbygoogleLoaded = true;
+        }}
       />
       <Script
         strategy="beforeInteractive"

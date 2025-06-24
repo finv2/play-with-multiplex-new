@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 const AdsenseAd = ({
   adClient = "ca-pub-4575195873243785",
@@ -9,13 +9,34 @@ const AdsenseAd = ({
   responsive = true,
   test = true
 }) => {
+  const pushedRef = useRef(false);
+
   useEffect(() => {
-    try {
-      if (typeof window !== "undefined" && window.adsbygoogle) {
-        (window.adsbygoogle = window.adsbygoogle || []).push({});
+    if (pushedRef.current) return;
+  
+    const attemptPush = () => {
+      if (window.adsbygoogle && window.adsbygoogle.push) {
+        try {
+          window.adsbygoogle.push({});
+          pushedRef.current = true;
+        } catch (e) {
+          console.error("Adsense push error:", e);
+        }
+      } else {
+        setTimeout(attemptPush, 200);
       }
-    } catch (e) {
-      console.error("Adsense push error:", e);
+    };
+  
+    if (typeof window !== "undefined" && window.adsbygoogleLoaded) {
+      attemptPush();
+    } else {
+      const interval = setInterval(() => {
+        if (window.adsbygoogleLoaded) {
+          clearInterval(interval);
+          attemptPush();
+        }
+      }, 100);
+      return () => clearInterval(interval);
     }
   }, []);
 
@@ -27,7 +48,8 @@ const AdsenseAd = ({
       data-ad-slot={adSlot}
       data-ad-format={format}
       data-full-width-responsive={responsive ? "true" : "false"}
-      data-adtest={test ? "on" : null}    />
+      data-adtest={test ? "on" : null}
+    />
   );
 };
 
