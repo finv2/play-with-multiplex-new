@@ -1,15 +1,21 @@
 'use client';
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const AdsenseAd = ({
   adClient = "ca-pub-4575195873243785",
   adSlot = "6300978111",
   format = "auto",
   responsive = true,
-  test = true
+  test = true,
+  styles = {},
+  onAdLoaded = () => {},
+  onAdFailedToLoad = () => {},
+  showAfterLoad = false,
 }) => {
+  const insRef = useRef(null);
   const pushedRef = useRef(false);
+  const [loaded, setLoaded] = useState(showAfterLoad ? false : true);
 
   useEffect(() => {
     if (pushedRef.current) return;
@@ -40,10 +46,31 @@ const AdsenseAd = ({
     }
   }, []);
 
+  useEffect(() => {
+    let interval;
+    let counter = 0;
+    function checkLoaded() {
+      if(insRef.current) {
+        counter++;
+        if(insRef.current.dataset.adStatus === "filled") {
+          setLoaded(true);
+          onAdLoaded?.();
+          clearInterval(interval);
+        } else if(counter > 5) {
+          clearInterval(interval);
+          onAdFailedToLoad?.();
+        }
+      }
+    }
+    interval = setInterval(checkLoaded, 100);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <ins
+      ref={insRef}
       className="adsbygoogle adbanner-customize"
-      style={{ display: "block", width: "100%", border: test ? "1px solid red" : "none" }}
+      style={{ display: "block", width: "100%", border: test ? "1px solid red" : "none", ...(loaded ? { opacity: 1 } : { opacity: 0 }), ...styles }}
       data-ad-client={adClient}
       data-ad-slot={adSlot}
       data-ad-format={format}

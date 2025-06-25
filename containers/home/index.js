@@ -9,6 +9,7 @@ import Modal from "@components/model";
 function Home({ games }) {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(true);
+  const [isModalAdLoaded, setIsModalAdLoaded] = useState(false);
 
   return (
     <>
@@ -38,7 +39,7 @@ function Home({ games }) {
           test={process.env.NODE_ENV === "development"}
         />
 
-        <div className="flex items-center justify-center pt-10 px-5 pb-5">
+        <div className="flex items-center justify-center pt-5 px-5 pb-5">
           <div className="bg-primary1 w-full rounded-md border-solid border-x-[1px] border-primary1 border-y-[1px] p-3">
             <div className="text-primary2 text-center font-bold pb-2">
               Welcome to Add on home screen
@@ -57,7 +58,9 @@ function Home({ games }) {
 
         <div className="gcse-search" />
 
-        <div className="flex items-center justify-center pt-10 px-5 pb-10">
+        <Ads multiplex={true} adSlot="5998667879" test={process.env.NODE_ENV === "development"} />
+
+        <div className="flex items-center justify-center pt-5 px-5 pb-10">
           <div className="bg-primary1 rounded-md border-solid border-x-[1px] border-primary1 border-y-[1px] p-5">
             <div className="text-primary2 text-center font-bold pb-5">
               Pick which of these game categories you enjoy more!
@@ -80,8 +83,6 @@ function Home({ games }) {
             </div>
           </div>
         </div>
-
-        <Ads multiplex={true} adSlot="5998667879" test={process.env.NODE_ENV === "development"} />
 
         <div>
           <div className="px-5 grid grid-cols-2 gap-2 pb-5">
@@ -138,14 +139,24 @@ function Home({ games }) {
       </div>
 
       <Modal
+        id="modal"
         isOpen={isOpen}
-        onClose={() => setIsOpen(false)}
+        setIsOpen={setIsOpen}
         outerClassName="border-[1px] border-white"
+        invisible={!isModalAdLoaded}
       >
         <div className="md:mt-[18px] mt-[20px]">
           <Ads
             adSlot="7506023729"
             test={process.env.NODE_ENV === "development"}
+            showAfterLoad={true}
+            onAdLoaded={() => setIsModalAdLoaded(true)}
+            onAdFailedToLoad={() => setIsOpen(false)}
+            styles={{
+              display: "block",
+              width: 336,
+              height: 280,
+            }}
           />
         </div>
       </Modal>

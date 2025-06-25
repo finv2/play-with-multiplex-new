@@ -10,13 +10,14 @@ function Modal({
   outerClassName = "",
   containerClassName = "",
   isOpen = false,
-  onClose = () => {},
+  setIsOpen = () => {},
   showCloseBtn = true,
   children = null,
   size = "sm",
   isDisableOutsideClick = false,
   title = null,
   closeIconClassName = "",
+  invisible = false,
 }) {
   const modalRef = useRef(null);
   const [isClient, setIsClient] = useState(false);
@@ -29,11 +30,11 @@ function Modal({
   // ESC key close
   useEffect(() => {
     const handleEsc = (e) => {
-      if (e.key === "Escape") onClose();
+      if (e.key === "Escape") setIsOpen(false);
     };
     if (isOpen) document.addEventListener("keydown", handleEsc);
     return () => document.removeEventListener("keydown", handleEsc);
-  }, [isOpen, onClose]);
+  }, [isOpen, setIsOpen]);
 
   // Outside click close
   const handleOutsideClick = (e) => {
@@ -42,14 +43,14 @@ function Modal({
       modalRef.current &&
       !modalRef.current.contains(e.target)
     ) {
-      onClose();
+      setIsOpen(false);
     }
   };
 
   if (!isOpen) return null;
 
   const modalContent = (
-    <div className={cn(styles.modal)} id="modal" onClick={handleOutsideClick}>
+    <div className={cn(styles.modal)} id="modal" onClick={handleOutsideClick} style={{ backgroundColor: invisible ? 'transparent' : '#14141680' }}>
       <div
         className={cn(
           styles.outer,
@@ -61,6 +62,7 @@ function Modal({
           },
           outerClassName
         )}
+        style={{ opacity: invisible ? 0 : 1 }}
       >
         <div
           ref={modalRef}
@@ -69,7 +71,7 @@ function Modal({
           {title && <div className={styles.title}>{title}</div>}
           <div className={styles.content}>{children}</div>
           {showCloseBtn && (
-            <div className={cn(styles.close)} onClick={onClose}>
+            <div className={cn(styles.close)} onClick={() => setIsOpen(false)}>
               <CgCloseR
                 size={20}
                 className={cn(styles.closeIcon, closeIconClassName)}
