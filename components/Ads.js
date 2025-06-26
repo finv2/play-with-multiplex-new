@@ -50,19 +50,23 @@ const AdsenseAd = ({
     let interval;
     let counter = 0;
     function checkLoaded() {
+      console.log("checking out", insRef.current)
       if(insRef.current) {
+        console.log("checking in", insRef.current.dataset.adStatus, counter, insRef.current.dataset)
         counter++;
         if(insRef.current.dataset.adStatus === "filled") {
+          console.log("ad loaded")
           setLoaded(true);
           onAdLoaded?.();
           clearInterval(interval);
-        } else if(counter > 5) {
+        } else if(counter > 10) {
+          console.log("ad failed")
           clearInterval(interval);
           onAdFailedToLoad?.();
         }
       }
     }
-    interval = setInterval(checkLoaded, 100);
+    interval = setInterval(checkLoaded, 500);
     return () => clearInterval(interval);
   }, []);
 
