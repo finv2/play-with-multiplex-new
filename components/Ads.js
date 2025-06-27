@@ -50,10 +50,10 @@ const AdsenseAd = ({
     let interval;
     let counter = 0;
     function checkLoaded() {
-      console.log("checking out", insRef.current, insRef.current.dataset.adsbygoogleStatus)
+      console.log(`======================================= ${adSlot} ===========================================================`, insRef.current.dataset.adsbygoogleStatus)
       // adsbygoogle-status
       if(insRef.current && insRef.current.dataset.adsbygoogleStatus === 'done') {
-        console.log("checking in", insRef.current.dataset.adStatus, counter, insRef.current.dataset)
+        console.log("checking in", insRef.current.dataset.adStatus, counter)
         counter++;
         if(insRef.current.dataset.adStatus === "filled") {
           console.log("ad loaded")
@@ -65,6 +65,7 @@ const AdsenseAd = ({
           clearInterval(interval);
           onAdFailedToLoad?.();
           insRef.current.style.height = "0px";
+          insRef.current.style.display = "none";
         }
       }
     }

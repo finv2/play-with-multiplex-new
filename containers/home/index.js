@@ -39,7 +39,7 @@ function Home({ games }) {
           test={process.env.NODE_ENV === "development"}
         />
 
-        <div className="flex items-center justify-center pt-5 px-5 pb-5">
+        <div className="flex items-center justify-center p-5">
           <div className="bg-primary1 w-full rounded-md border-solid border-x-[1px] border-primary1 border-y-[1px] p-3">
             <div className="text-primary2 text-center font-bold pb-2">
               Welcome to Add on home screen
@@ -48,7 +48,7 @@ function Home({ games }) {
               <button
                 type="button"
                 onClick={() => alert("Not Available For Your Device")}
-                className="bg-primary2 shadow-custom text-white font-bold hover:bg-primary3 border border-none rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center me-2 mb-2"
+                className="bg-primary2 shadow-custom text-white font-bold hover:bg-primary3 border border-none rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center"
               >
                 Add
               </button>
@@ -58,9 +58,9 @@ function Home({ games }) {
 
         <div className="gcse-search" />
 
-        <Ads multiplex={true} adSlot="5998667879" test={process.env.NODE_ENV === "development"} />
+        {/* <Ads multiplex={true} adSlot="5998667879" test={process.env.NODE_ENV === "development"} /> */}
 
-        <div className="flex items-center justify-center pt-5 px-5 pb-10">
+        <div className="flex items-center justify-center p-5">
           <div className="bg-primary1 rounded-md border-solid border-x-[1px] border-primary1 border-y-[1px] p-5">
             <div className="text-primary2 text-center font-bold pb-5">
               Pick which of these game categories you enjoy more!
@@ -138,7 +138,7 @@ function Home({ games }) {
         </div>
       </div>
 
-      <Modal
+      {/* <Modal
         id="modal"
         isOpen={isOpen}
         setIsOpen={setIsOpen}
@@ -159,7 +159,7 @@ function Home({ games }) {
             }}
           />
         </div>
-      </Modal>
+      </Modal> */}
     </>
   );
 }

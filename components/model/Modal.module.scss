@@ -3,7 +3,7 @@
 .modal {
   display: flex;
   position: fixed;
-  top: 0rem;
+  top: 0;
   left: 0;
   width: 100%;
   height: 100%;
@@ -11,10 +11,7 @@
   animation: showModal 0.4s forwards;
   overflow: auto;
   z-index: 999;
-  // background-color: rgba($neutrals1, 0.5);
-  // @include dark {
-  //   background-color: rgba($neutrals2, 0.5);
-  // }
+
   @media (min-width: 768px) {
     padding: 2rem;
   }
@@ -40,50 +37,49 @@
   @include dark {
     background-color: neutrals1;
   }
+
+  @media (min-width: 768px) {
+    max-width: 480px; // Limit only on larger screens
+  }
 }
 
 .sm {
-  max-width: 380px;
+  @media (min-width: 768px) {
+    max-width: 380px;
+  }
 }
 
 .md {
-  max-width: 648px;
+  @media (min-width: 768px) {
+    max-width: 648px;
+  }
 }
 
 .m {
-  max-width: 548px;
+  @media (min-width: 768px) {
+    max-width: 548px;
+  }
 }
 
 .lg {
-  max-width: 848px;
-  max-height: 100%;
-  overflow-y: auto;
+  @media (min-width: 768px) {
+    max-width: 848px;
+  }
 }
 
 .container {
   position: relative;
-  padding: 1.4rem
-}
+  padding: 1.4rem;
 
-@media (min-width: 390px) and (max-width: 780px) {
-  .container {
-    position: relative;
+  @media (min-width: 390px) and (max-width: 780px) {
     padding: 21px;
   }
-}
-@media (max-width: 389px) {
-  .container {
-    position: relative;
+
+  @media (max-width: 389px) {
     padding: 10px;
     padding-top: 25px;
   }
-
-  .sm {
-    max-width: 340px;
-  }
-
 }
-
 
 .close {
   position: absolute;
