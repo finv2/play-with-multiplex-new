@@ -1,22 +1,17 @@
-'use client';
+"use client";
 
 import cn from "classnames";
 import { createPortal } from "react-dom";
-import React, { useEffect, useRef, useState } from "react";
-import { CgCloseR } from "react-icons/cg";
 import styles from "./Modal.module.scss";
+import React, { useEffect, useRef, useState } from "react";
 
 function Modal({
   outerClassName = "",
-  containerClassName = "",
   isOpen = false,
   setIsOpen = () => {},
   showCloseBtn = true,
   children = null,
-  size = "sm",
   isDisableOutsideClick = false,
-  title = null,
-  closeIconClassName = "",
   invisible = false,
 }) {
   const modalRef = useRef(null);
@@ -50,35 +45,25 @@ function Modal({
   if (!isOpen) return null;
 
   const modalContent = (
-    <div className={cn(styles.modal)} id="modal" onClick={handleOutsideClick} style={{ backgroundColor: invisible ? 'transparent' : '#14141680' }}>
+    <div
+      className={cn(styles.overlay)}
+      id="modal"
+      onClick={handleOutsideClick}
+      style={{
+        display: "flex",
+        opacity: 1,
+      }}
+    >
       <div
-        className={cn(
-          styles.outer,
-          {
-            [styles.sm]: size === "sm",
-            [styles.m]: size === "m",
-            [styles.md]: size === "md",
-            [styles.lg]: size === "lg",
-          },
-          outerClassName
-        )}
-        style={{ opacity: invisible ? 0 : 1 }}
+        className={cn(styles.content, outerClassName)}
+        style={{ opacity: invisible ? 0 : 1, height: "auto !important" }}
       >
-        <div
-          ref={modalRef}
-          className={cn(styles.container, containerClassName)}
-        >
-          {title && <div className={styles.title}>{title}</div>}
-          <div className={styles.content}>{children}</div>
-          {showCloseBtn && (
-            <div className={cn(styles.close)} onClick={() => setIsOpen(false)}>
-              <CgCloseR
-                size={20}
-                className={cn(styles.closeIcon, closeIconClassName)}
-              />
-            </div>
-          )}
-        </div>
+        {showCloseBtn && (
+          <div className={cn(styles.close)} onClick={() => setIsOpen(false)}>
+            x
+          </div>
+        )}
+        <div ref={modalRef}>{children}</div>
       </div>
     </div>
   );
@@ -89,4 +74,3 @@ function Modal({
 }
 
 export default Modal;
-

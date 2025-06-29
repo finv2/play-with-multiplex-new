@@ -1,7 +1,7 @@
 import Head from "next/head";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import Ads from "@components/Ads";
 import Modal from "@components/model";
@@ -9,7 +9,21 @@ import Modal from "@components/model";
 function Home({ games }) {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(true);
-  const [isModalAdLoaded, setIsModalAdLoaded] = useState(false);
+  const [isModalAdLoaded, setIsModalAdLoaded] = useState(true);
+
+  useEffect(() => {
+    if (isOpen) {
+      // Prevent scrolling
+      document.body.style.overflow = 'hidden';
+    } else {
+      // Restore scrolling
+      document.body.style.overflow = '';
+    }
+  
+    return () => {
+      document.body.style.overflow = ''; // Cleanup on unmount
+    };
+  }, [isOpen]);
 
   return (
     <>
@@ -143,19 +157,21 @@ function Home({ games }) {
         isOpen={isOpen}
         setIsOpen={setIsOpen}
         outerClassName="border-[1px] border-white"
-        invisible={!isModalAdLoaded}
+        // invisible={!isModalAdLoaded}
       >
         <div className="md:mt-[18px] mt-[20px]">
           <Ads
             adSlot="7506023729"
             test={process.env.NODE_ENV === "development"}
-            showAfterLoad={true}
-            onAdLoaded={() => setIsModalAdLoaded(true)}
-            onAdFailedToLoad={() => setIsOpen(false)}
+            // showAfterLoad={true}
+            // onAdLoaded={() => setIsModalAdLoaded(true)}
+            // onAdFailedToLoad={() => setIsOpen(false)}
             styles={{
               display: "block",
-              width: 336,
-              height: 280,
+              height: "296px",
+              maxWidth: "800px",
+              marginLeft: "-11px",
+              width: "296px",
             }}
           />
         </div>
