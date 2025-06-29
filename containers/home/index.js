@@ -58,7 +58,7 @@ function Home({ games }) {
 
         <div className="gcse-search" />
 
-        {/* <Ads multiplex={true} adSlot="5998667879" test={process.env.NODE_ENV === "development"} /> */}
+        <Ads multiplex={true} adSlot="5998667879" test={process.env.NODE_ENV === "development"} />
 
         <div className="flex items-center justify-center p-5">
           <div className="bg-primary1 rounded-md border-solid border-x-[1px] border-primary1 border-y-[1px] p-5">
@@ -138,7 +138,7 @@ function Home({ games }) {
         </div>
       </div>
 
-      {/* <Modal
+      <Modal
         id="modal"
         isOpen={isOpen}
         setIsOpen={setIsOpen}
@@ -159,7 +159,7 @@ function Home({ games }) {
             }}
           />
         </div>
-      </Modal> */}
+      </Modal>
     </>
   );
 }
