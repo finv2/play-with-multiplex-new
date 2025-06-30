@@ -157,15 +157,15 @@ function Home({ games }) {
         isOpen={isOpen}
         setIsOpen={setIsOpen}
         outerClassName="border-[1px] border-white"
-        // invisible={!isModalAdLoaded}
+        invisible={!isModalAdLoaded}
       >
         <div className="md:mt-[18px] mt-[20px]">
           <Ads
             adSlot="7506023729"
             test={process.env.NODE_ENV === "development"}
-            // showAfterLoad={true}
-            // onAdLoaded={() => setIsModalAdLoaded(true)}
-            // onAdFailedToLoad={() => setIsOpen(false)}
+            showAfterLoad={true}
+            onAdLoaded={() => setIsModalAdLoaded(true)}
+            onAdFailedToLoad={() => setIsOpen(false)}
             styles={{
               display: "block",
               height: "296px",
