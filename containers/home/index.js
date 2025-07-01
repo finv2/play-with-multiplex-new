@@ -159,9 +159,10 @@ function Home({ games }) {
         outerClassName="border-[1px] border-white"
         invisible={!isModalAdLoaded}
       >
-        <div className="md:mt-[18px] mt-[20px]">
+        <div className="md:mt-[18px] mt-[20px] text-center">
           <Ads
             adSlot="7506023729"
+            className="mx-auto modal-ad"
             test={process.env.NODE_ENV === "development"}
             showAfterLoad={true}
             onAdLoaded={() => setIsModalAdLoaded(true)}
@@ -170,7 +171,6 @@ function Home({ games }) {
               display: "block",
               height: "296px",
               maxWidth: "800px",
-              marginLeft: "-11px",
               width: "296px",
             }}
           />

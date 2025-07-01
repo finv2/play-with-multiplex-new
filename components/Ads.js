@@ -1,5 +1,6 @@
 'use client';
 
+import cn from "classnames";
 import { useEffect, useRef, useState } from "react";
 
 const AdsenseAd = ({
@@ -9,6 +10,7 @@ const AdsenseAd = ({
   responsive = true,
   test = true,
   styles = {},
+  className = "",
   onAdLoaded = () => {},
   onAdFailedToLoad = () => {},
   showAfterLoad = false,
@@ -76,7 +78,7 @@ const AdsenseAd = ({
   return (
     <ins
       ref={insRef}
-      className="adsbygoogle adbanner-customize"
+      className={cn("adsbygoogle adbanner-customize", className)}
       style={{ display: "block", width: "100%", border: test ? "1px solid red" : "none", ...(loaded ? { opacity: 1 } : { opacity: 0 }), ...styles }}
       data-ad-client={adClient}
       data-ad-slot={adSlot}

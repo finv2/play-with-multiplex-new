@@ -29,3 +29,13 @@ body {
 .stylee {
   height: 400px !important;
 }
+
+.modal-ad {
+  margin-left: 0px;
+}
+
+@media screen and (max-width: 470px) {
+  .modal-ad {
+    margin-left: -11px;
+  }
+}
