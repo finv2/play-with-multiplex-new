@@ -62,7 +62,7 @@ const AdsenseAd = ({
           setLoaded(true);
           onAdLoaded?.();
           clearInterval(interval);
-        } else if(counter > 10) {
+        } else if(counter > 3) {
           console.log("ad failed")
           clearInterval(interval);
           onAdFailedToLoad?.();

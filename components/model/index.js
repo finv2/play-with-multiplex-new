@@ -51,7 +51,7 @@ function Modal({
       onClick={handleOutsideClick}
       style={{
         display: "flex",
-        opacity: 1,
+        opacity: invisible ? 0 : 1
       }}
     >
       <div

@@ -9,7 +9,7 @@ import Modal from "@components/model";
 function Home({ games }) {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(true);
-  const [isModalAdLoaded, setIsModalAdLoaded] = useState(true);
+  const [isModalAdLoaded, setIsModalAdLoaded] = useState(false);
 
   useEffect(() => {
     if (isOpen) {
