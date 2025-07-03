@@ -167,12 +167,6 @@ function Home({ games }) {
             showAfterLoad={true}
             onAdLoaded={() => setIsModalAdLoaded(true)}
             onAdFailedToLoad={() => setIsOpen(false)}
-            styles={{
-              display: "block",
-              height: "296px",
-              maxWidth: "800px",
-              width: "296px",
-            }}
           />
         </div>
       </Modal>
