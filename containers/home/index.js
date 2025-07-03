@@ -169,9 +169,9 @@ function Home({ games }) {
             onAdFailedToLoad={() => setIsOpen(false)}
             styles={{
               display: "block",
-              height: "600px",
+              height: "296px",
               maxWidth: "800px",
-              width: "336px",
+              width: "296px",
             }}
           />
         </div>
