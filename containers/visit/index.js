@@ -99,6 +99,7 @@ function VisitPage() {
               display={true}
               adSlot="7506023729"
               className="mx-auto modal-ad"
+              test={process.env.NODE_ENV === "development"}
               styles={{
                 display: "block",
                 height: "296px",
