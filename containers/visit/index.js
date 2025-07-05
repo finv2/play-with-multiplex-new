@@ -7,7 +7,7 @@ import { gameData } from "../../data/game";
 
 function VisitPage() {
   const [isClient, setIsClient] = useState(false);
-  const [isOpen, SetIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(true);
   useEffect(() => {
     // Ensures that the component only renders client-side content after hydration
     setIsClient(true);
@@ -90,12 +90,22 @@ function VisitPage() {
 
       {isClient && (
         <Modal
-          outerClassName="border-[1px] border-white"
           isOpen={isOpen}
-          onClose={() => SetIsOpen(false)}
+          setIsOpen={setIsOpen}
+          outerClassName="border-[1px] border-white"
         >
           <div className="md:mt-[18px] mt-[20px]">
-            <Ads display={true} adSlot="7506023729" />
+            <Ads
+              display={true}
+              adSlot="7506023729"
+              className="mx-auto modal-ad"
+              styles={{
+                display: "block",
+                height: "296px",
+                maxWidth: "800px",
+                width: "296px",
+              }}
+            />
           </div>
         </Modal>
       )}
