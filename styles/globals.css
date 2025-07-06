@@ -29,3 +29,20 @@ body {
 .stylee {
   height: 400px !important;
 }
+
+.modal-ad {
+  margin-left: 0px;
+  display: block;
+  width: 336px;
+  height: 296px;
+  max-width: 800px;
+}
+
+@media screen and (max-width: 470px) {
+  .modal-ad {
+    margin-left: -11px;
+    height: 280px;
+    width: unset;
+    max-width: 800px;
+  }
+}

@@ -1,81 +1,76 @@
-import cn from "classnames";
-import PropTypes from "prop-types";
-import React from "react";
-import { createPortal } from "react-dom";
-import { CgCloseR } from "react-icons/cg";
-import styles from "./Modal.module.scss";
-function Modal(props) {
-  const {
-    outerClassName,
-    containerClassName,
-    isOpen,
-    onClose,
-    showCloseBtn,
-    children,
-    size,
-    title,
-    closeIconClassName,
-  } = props;
+"use client";
 
-  if (typeof document !== "undefined") {
-    return createPortal(
-      isOpen && (
-        <div className={cn(styles.modal)} id="modal">
-          <div
-            className={cn(
-              styles.outer,
-              {
-                [styles.sm]: size === "sm",
-                [styles.m]: size === "m",
-                [styles.md]: size === "md",
-                [styles.lg]: size === "lg",
-              },
-              outerClassName
-            )}
-          >
-            <div className={cn(styles.container, containerClassName)}>
-              {title}
-              <div className="">{children}</div>
-              {showCloseBtn && (
-                <div className={cn(styles.close)} onClick={onClose}>
-                  <CgCloseR size={20} className={styles.closeIcon} />
-                </div>
-              )}
-            </div>
+import cn from "classnames";
+import { createPortal } from "react-dom";
+import styles from "./Modal.module.scss";
+import React, { useEffect, useRef, useState } from "react";
+
+function Modal({
+  outerClassName = "",
+  isOpen = false,
+  setIsOpen = () => {},
+  showCloseBtn = true,
+  children = null,
+  isDisableOutsideClick = false,
+  invisible = false,
+}) {
+  const modalRef = useRef(null);
+  const [isClient, setIsClient] = useState(false);
+
+  // Mark as client after mount
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  // ESC key close
+  useEffect(() => {
+    const handleEsc = (e) => {
+      if (e.key === "Escape") setIsOpen(false);
+    };
+    if (isOpen) document.addEventListener("keydown", handleEsc);
+    return () => document.removeEventListener("keydown", handleEsc);
+  }, [isOpen, setIsOpen]);
+
+  // Outside click close
+  const handleOutsideClick = (e) => {
+    if (
+      !isDisableOutsideClick &&
+      modalRef.current &&
+      !modalRef.current.contains(e.target)
+    ) {
+      setIsOpen(false);
+    }
+  };
+
+  if (!isOpen) return null;
+
+  const modalContent = (
+    <div
+      className={cn(styles.overlay)}
+      id="modal"
+      onClick={handleOutsideClick}
+      style={{
+        display: "flex",
+        opacity: invisible ? 0 : 1
+      }}
+    >
+      <div
+        className={cn(styles.content, outerClassName)}
+        style={{ opacity: invisible ? 0 : 1, height: "auto !important" }}
+      >
+        {showCloseBtn && (
+          <div className={cn(styles.close)} onClick={() => setIsOpen(false)}>
+            x
           </div>
-        </div>
-      ),
-      document.body
-    );
-  }
+        )}
+        <div ref={modalRef}>{children}</div>
+      </div>
+    </div>
+  );
+
+  // During SSR: return plain content (no portal)
+  // After client mount: render in portal
+  return isClient ? createPortal(modalContent, document.body) : modalContent;
 }
 
 export default Modal;
-
-Modal.propTypes = {
-  outerClassName: PropTypes.string,
-  containerClassName: PropTypes.string,
-  isOpen: PropTypes.bool,
-  onClose: PropTypes.func,
-  showCloseBtn: PropTypes.bool,
-  children: PropTypes.element,
-  size: PropTypes.oneOf(["sm", "m", "md", "lg"]),
-  isDisableOutsideClick: PropTypes.bool,
-  modalClassName: PropTypes.string,
-  title: PropTypes.element,
-  closeIconClassName: PropTypes.string,
-};
-
-Modal.defaultProps = {
-  outerClassName: "",
-  containerClassName: "",
-  isOpen: false,
-  onClose: () => {},
-  showCloseBtn: true,
-  children: null,
-  size: "sm",
-  isDisableOutsideClick: false,
-  modalClassName: "",
-  title: null,
-  closeIconClassName: "",
-};

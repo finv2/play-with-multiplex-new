@@ -6,12 +6,9 @@ import { IoLogoFacebook, IoLogoInstagram, IoLogoYoutube } from "react-icons/io";
 import { gameData } from "../../data/game";
 
 function VisitPage() {
-  const [isClient, setIsClient] = useState(false);
-  const [isOpen, SetIsOpen] = useState(true);
-  useEffect(() => {
-    // Ensures that the component only renders client-side content after hydration
-    setIsClient(true);
-  }, [isClient]);
+  const [isOpen, setIsOpen] = useState(true);
+  const [isModalAdLoaded, setIsModalAdLoaded] = useState(false);
+
   return (
     <>
       <div className="mx-auto h-max ls:w-[360px] bg-white">
@@ -36,9 +33,8 @@ function VisitPage() {
 
         {/* Google Ads */}
         <Ads
-          data-ad-slot="8616430030"
-          data-ad-format="auto"
-          data-full-width-responsive="true"
+          adSlot="8616430030"
+          test={process.env.NODE_ENV === "development"}
         />
         {/* Game Data */}
         <div className="px-5 grid grid-cols-2 gap-2">
@@ -89,17 +85,30 @@ function VisitPage() {
         </div>
       </div>
 
-      {isClient && (
         <Modal
-          outerClassName="border-[1px] border-white"
           isOpen={isOpen}
-          onClose={() => SetIsOpen(false)}
+          setIsOpen={setIsOpen}
+          invisible={!isModalAdLoaded}
+          outerClassName="border-[1px] border-white"
         >
           <div className="md:mt-[18px] mt-[20px]">
-            <Ads display={true} data-ad-slot="7506023729" />
+            <Ads
+              display={true}
+              adSlot="7506023729"
+              className="mx-auto modal-ad"
+              test={process.env.NODE_ENV === "development"}
+              showAfterLoad={true}
+              onAdLoaded={() => setIsModalAdLoaded(true)}
+              onAdFailedToLoad={() => setIsOpen(false)}
+              styles={{
+                display: "block",
+                height: "296px",
+                maxWidth: "800px",
+                width: "296px",
+              }}
+            />
           </div>
         </Modal>
-      )}
     </>
   );
 }

@@ -1,105 +1,84 @@
-@import "../../styles/colors";
-
-.modal {
-  display: flex;
+.overlay {
   position: fixed;
-  top: 0rem;
+  top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
   opacity: 0;
-  animation: showModal 0.4s forwards;
-  overflow: auto;
-  z-index: 999;
-  background-color: rgba($neutrals1, 0.5);
-  @include dark {
-    background-color: rgba($neutrals2, 0.5);
-  }
-  @media (min-width: 768px) {
-    padding: 2rem;
-  }
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.4);
+  -webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(5px);
+  z-index: 1000;
+  pointer-events: none;
 }
 
-@keyframes showModal {
-  0% {
-    opacity: 0;
-    transform: translateY(2rem);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.outer {
-  width: 100%;
-  margin: auto;
-  border-radius: 10px;
-  z-index: 2;
-  background-color: neutrals8;
-  @include dark {
-    background-color: neutrals1;
-  }
-}
-
-.sm {
-  max-width: 380px;
-}
-
-.md {
-  max-width: 648px;
-}
-
-.m {
-  max-width: 548px;
-}
-
-.lg {
-  max-width: 848px;
-  max-height: 100%;
-  overflow-y: auto;
-}
-
-.container {
+.content {
   position: relative;
-  padding: 1.4rem
+  height: auto;
+  border: 1px solid #888;
+  color: #fff;
+  border-radius: 5px;
+  margin: 0 auto;
+  // width: 600px;
+  padding: 10px;
+  position: absolute;
+  pointer-events: auto;
+  z-index: 1001;
 }
 
-@media (min-width: 390px) and (max-width: 780px) {
-  .container {
-    position: relative;
-    padding: 21px;
-  }
-}
-@media (max-width: 389px) {
-  .container {
-    position: relative;
-    padding: 10px;
-    padding-top: 25px;
-  }
-
-  .sm {
-    max-width: 340px;
-  }
-
+.popup {
+  align-items: center;
 }
 
+.popup {
+  outline: none;
+  background-color: #ffffff;
+  border: 1px solid #000;
+  border-radius: 20%;
+  color: #000;
+  cursor: pointer;
+  font-family: arial;
+  font-size: 25px;
+  font-weight: 700;
+  height: 30px;
+  line-height: 25px;
+  margin-bottom: 10px;
+  position: relative;
+  text-align: center;
+  width: 30px;
+  z-index: 1003;
+}
+
+@media screen and (max-width: 640px) {
+  .content {
+    width: 350px;
+  }
+}
+
+@media screen and (max-width: 470px) {
+  .content {
+    width: 100%;
+  }
+}
 
 .close {
-  position: absolute;
-  top: 1rem;
-  left: 1rem;
+  outline: none;
+  background-color: #ffffff;
+  border: 1px solid #000;
+  border-radius: 20%;
+  color: #000;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-
-  .closeIcon {
-    color: white;
-  }
-
-  .closeText {
-    font-size: 12px;
-    font-weight: 400;
-    color: white;
-  }
+  font-family: arial;
+  font-size: 25px;
+  font-weight: 700;
+  height: 30px;
+  line-height: 25px;
+  margin-bottom: 10px;
+  position: relative;
+  text-align: center;
+  width: 30px;
+  z-index: 1003;
 }

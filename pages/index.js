@@ -1,4 +1,5 @@
 import Head from "next/head";
+import Script from "next/script";
 import { Fragment } from "react";
 import Home from "../containers/home";
 import { gameData } from "data/game";
@@ -30,13 +31,21 @@ export default function Homepage({ games }) {
           href="https://www.google.com"
           crossOrigin="anonymous"
         />
-
-        <script
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4575195873243785"
-          crossorigin="anonymous"
-        ></script>
       </Head>
+
+      <Script
+        id="adsense-script"
+        crossOrigin="anonymous"
+        strategy="afterInteractive"
+        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4575195873243785"
+        onLoad={() => {
+          window.adsbygoogleLoaded = true;
+        }}
+      />
+      <Script
+        strategy="beforeInteractive"
+        src="https://cse.google.com/cse.js?cx=79d49729a410059d7"
+      />
 
       <Home games={games} />
     </Fragment>

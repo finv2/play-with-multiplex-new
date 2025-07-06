@@ -1,55 +1,29 @@
-import Ads from "@components/Ads";
-import Modal from "@components/model";
 import Head from "next/head";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import Script from "next/script";
 import React, { useEffect, useState } from "react";
-import { notify } from "../../components/Notify";
+
+import Ads from "@components/Ads";
+import Modal from "@components/model";
 
 function Home({ games }) {
   const router = useRouter();
-  const [isClient, setIsClient] = useState(false);
   const [isOpen, setIsOpen] = useState(true);
-  const [adsLoaded, setAdsLoaded] = useState(false);
+  const [isModalAdLoaded, setIsModalAdLoaded] = useState(false);
 
   useEffect(() => {
-    setIsClient(true);
-  }, []);
-
-  useEffect(() => {
-    const script = document.createElement("script");
-    script.src =
-      "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4575195873243785";
-    script.async = true;
-    script.crossOrigin = "anonymous";
-    script.onload = () => {
-      setAdsLoaded(true);
-      window.adsbygoogle = window.adsbygoogle || [];
-      window.adsbygoogle.push({});
-    };
-    document.head.appendChild(script);
-  }, []);
-
-  useEffect(() => {
-    if (isOpen && adsLoaded) {
-      setTimeout(() => {
-        try {
-          window.adsbygoogle && window.adsbygoogle.push({});
-        } catch (error) {
-          console.error("Ad reload error:", error);
-        }
-      }, 1000);
+    if (isOpen) {
+      // Prevent scrolling
+      document.body.style.overflow = 'hidden';
+    } else {
+      // Restore scrolling
+      document.body.style.overflow = '';
     }
-  }, [isOpen, adsLoaded]);
-
-  if (!adsLoaded) {
-    return (
-      <div className="flex items-center justify-center h-screen">
-        <p>Loading ads...</p>
-      </div>
-    );
-  }
+  
+    return () => {
+      document.body.style.overflow = ''; // Cleanup on unmount
+    };
+  }, [isOpen]);
 
   return (
     <>
@@ -57,11 +31,6 @@ function Home({ games }) {
         <title>Play Games | Fingameon</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Head>
-
-      <Script
-        strategy="lazyOnload"
-        src="https://cse.google.com/cse.js?cx=79d49729a410059d7"
-      />
 
       <div className="mx-auto h-max ls:w-[360px] bg-white">
         <a href="https://fingameon.com/">
@@ -78,12 +47,13 @@ function Home({ games }) {
         </a>
 
         <Ads
-          data-ad-slot="8616430030"
-          data-ad-format="auto"
-          data-full-width-responsive="true"
+          adSlot="8616430030"
+          responsive={true}
+          format="auto"
+          test={process.env.NODE_ENV === "development"}
         />
 
-        <div className="flex items-center justify-center pt-10 px-5 pb-5">
+        <div className="flex items-center justify-center p-5">
           <div className="bg-primary1 w-full rounded-md border-solid border-x-[1px] border-primary1 border-y-[1px] p-3">
             <div className="text-primary2 text-center font-bold pb-2">
               Welcome to Add on home screen
@@ -91,8 +61,8 @@ function Home({ games }) {
             <div className="flex items-center justify-center">
               <button
                 type="button"
-                onClick={() => notify.error("Not Available For Your Device")}
-                className="bg-primary2 shadow-custom text-white font-bold hover:bg-primary3 border border-none rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center me-2 mb-2"
+                onClick={() => alert("Not Available For Your Device")}
+                className="bg-primary2 shadow-custom text-white font-bold hover:bg-primary3 border border-none rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center"
               >
                 Add
               </button>
@@ -100,9 +70,11 @@ function Home({ games }) {
           </div>
         </div>
 
-        {isClient && <div className="gcse-search" />}
+        <div className="gcse-search" />
 
-        <div className="flex items-center justify-center pt-10 px-5 pb-10">
+        <Ads multiplex={true} adSlot="5998667879" test={process.env.NODE_ENV === "development"} />
+
+        <div className="flex items-center justify-center p-5">
           <div className="bg-primary1 rounded-md border-solid border-x-[1px] border-primary1 border-y-[1px] p-5">
             <div className="text-primary2 text-center font-bold pb-5">
               Pick which of these game categories you enjoy more!
@@ -125,8 +97,6 @@ function Home({ games }) {
             </div>
           </div>
         </div>
-
-        <Ads multiplex={true} data-ad-slot="5998667879" />
 
         <div>
           <div className="px-5 grid grid-cols-2 gap-2 pb-5">
@@ -182,26 +152,30 @@ function Home({ games }) {
         </div>
       </div>
 
-      {isClient && (
-        <Modal
-          outerClassName="border-[1px] border-white"
-          isOpen={isOpen}
-          onClose={() => setIsOpen(false)}
-        >
-          <div className="md:mt-[18px] mt-[20px]">
-            <ins
-              className="adsbygoogle"
-              style={{ display: "block" }}
-              data-ad-client="ca-pub-4575195873243785"
-              data-ad-slot="7506023729"
-              data-ad-format="auto"
-            />
-            <script>
-              {`(adsbygoogle = window.adsbygoogle || []).push({});`}
-            </script>
-          </div>
-        </Modal>
-      )}
+      <Modal
+        id="modal"
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+        outerClassName="border-[1px] border-white"
+        invisible={!isModalAdLoaded}
+      >
+        <div className="md:mt-[18px] mt-[20px] text-center">
+          <Ads
+            adSlot="7506023729"
+            className="mx-auto modal-ad"
+            test={process.env.NODE_ENV === "development"}
+            showAfterLoad={true}
+            onAdLoaded={() => setIsModalAdLoaded(true)}
+            onAdFailedToLoad={() => setIsOpen(false)}
+            styles={{
+              display: "block",
+              height: "296px",
+              maxWidth: "800px",
+              width: "296px",
+            }}
+          />
+        </div>
+      </Modal>
     </>
   );
 }
