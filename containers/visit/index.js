@@ -6,12 +6,9 @@ import { IoLogoFacebook, IoLogoInstagram, IoLogoYoutube } from "react-icons/io";
 import { gameData } from "../../data/game";
 
 function VisitPage() {
-  const [isClient, setIsClient] = useState(false);
   const [isOpen, setIsOpen] = useState(true);
-  useEffect(() => {
-    // Ensures that the component only renders client-side content after hydration
-    setIsClient(true);
-  }, [isClient]);
+  const [isModalAdLoaded, setIsModalAdLoaded] = useState(false);
+
   return (
     <>
       <div className="mx-auto h-max ls:w-[360px] bg-white">
@@ -88,10 +85,10 @@ function VisitPage() {
         </div>
       </div>
 
-      {isClient && (
         <Modal
           isOpen={isOpen}
           setIsOpen={setIsOpen}
+          invisible={!isModalAdLoaded}
           outerClassName="border-[1px] border-white"
         >
           <div className="md:mt-[18px] mt-[20px]">
@@ -100,6 +97,9 @@ function VisitPage() {
               adSlot="7506023729"
               className="mx-auto modal-ad"
               test={process.env.NODE_ENV === "development"}
+              showAfterLoad={true}
+              onAdLoaded={() => setIsModalAdLoaded(true)}
+              onAdFailedToLoad={() => setIsOpen(false)}
               styles={{
                 display: "block",
                 height: "296px",
@@ -109,7 +109,6 @@ function VisitPage() {
             />
           </div>
         </Modal>
-      )}
     </>
   );
 }
