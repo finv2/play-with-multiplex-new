@@ -33,7 +33,7 @@ function Home({ games }) {
       </Head>
 
       <div className="mx-auto h-max ls:w-[360px] bg-white">
-        <a href="https://fingameon.com/">
+        <a href="https://game.fingameon.com/">
           <div className="h-[50px] flex items-center justify-center bg-primary1">
             <Image
               src="/gameImage/Logo.png"
@@ -136,7 +136,7 @@ function Home({ games }) {
         </div>
 
         <div className="pt-10 px-5 pb-5">
-          <a href="https://fingameon.com/">
+          <a href="https://game.fingameon.com/">
             <button
               type="button"
               className="w-full text-center bg-primary2 text-white font-bold hover:bg-primary3 border border-gray-200 rounded-lg text-sm px-4 py-2"
@@ -144,7 +144,7 @@ function Home({ games }) {
               More Games
             </button>
           </a>
-          <a href="https://fingameon.com/privacy-policy">
+          <a href="https://game.fingameon.com/privacy-policy">
             <div className="flex items-center justify-center text-primary2 hover:underline">
               Privacy Policy
             </div>
